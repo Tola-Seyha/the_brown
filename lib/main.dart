@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:the_brown/screen/signup_screen.dart';
+import 'package:the_brown/theme/them_mode.dart';
+import 'package:the_brown/widgets/widget_tree.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,16 +13,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-
-      theme: ThemeData(
-        fontFamily: "Roboto",
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Color(0xffF6F8F6),
-          brightness: Brightness.light,
-        ),
-      ),
-      home: SignupScreen(),
-    );
+      debugShowCheckedModeBanner: false, 
+      
+      theme: colorMode, 
+      home: WidgetTree(),
+    ); 
+ 
   }
 }

@@ -25,7 +25,7 @@ class _SignupScreenState extends State<SignupScreen> {
             flex: 4,
             child: Container(
               width: double.infinity,
-              color: Colors.amber,
+              // color: Colors.amber,
               child: Image.asset("assets/image/login.png", fit: BoxFit.cover),
             ),
           ),
@@ -177,8 +177,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                     width: 1.5,
                                   ),
                                 ),
-                              ), 
-                              validator: (value) => value != _pwdCtrl.text  || value == null
+                              ),
+                              validator: (value) =>
+                                  value!.isEmpty || value != _pwdCtrl.text
                                   ? "Please confirm password"
                                   : null,
                             ),
@@ -223,18 +224,28 @@ class _SignupScreenState extends State<SignupScreen> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 15,), 
+                            SizedBox(height: 15),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.center, 
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text("Have an account?", style: TextStyle(fontSize: 16, ),),
-                                SizedBox(width: 10,),
+                                Text(
+                                  "Have an account?",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                SizedBox(width: 10),
                                 GestureDetector(
                                   onTap: () {},
-                                  child: Text("Sign In",style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Color(0xff0066FF)) ,),
+                                  child: Text(
+                                    "Sign In",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xff0066FF),
+                                    ),
+                                  ),
                                 ),
                               ],
-                            ), 
+                            ),
                           ],
                         ),
                       ),
