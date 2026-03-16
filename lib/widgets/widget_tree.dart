@@ -4,7 +4,7 @@ import 'package:the_brown/screen/cart_screen.dart';
 import 'package:the_brown/screen/category_screen.dart';
 import 'package:the_brown/screen/favorite_screen.dart';
 import 'package:the_brown/screen/home_screen.dart';
-import 'package:the_brown/screen/profile_screen.dart';
+import 'package:the_brown/screen/profile_screen/profile_screen.dart';
 import 'package:the_brown/widgets/navigation_widget.dart';
 
 class WidgetTree extends StatefulWidget {
