@@ -7,5 +7,6 @@ ThemeData colorMode = ThemeData(
     primary: Color(0xffAF7950),
     secondary: Color(0xffDFC9B9),
     tertiary: Color(0xffF7F2EE),
+    error: Color(0xffCC0909), 
   ),
 );

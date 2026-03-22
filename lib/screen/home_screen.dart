@@ -5,18 +5,21 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return Scaffold( 
+      appBar: AppBar(   
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               "Welcome back...",
-              style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.primary),
+              style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
             Text(
               "The Brown",
-              style: TextStyle( 
+              style: TextStyle(
                 fontSize: 20,
                 color: Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.w500,
@@ -26,15 +29,13 @@ class HomeScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: CircleAvatar(
-              backgroundColor: Colors.white,
-              child: Icon(Icons.notifications_none),
-            ),
+            onPressed: () {}, 
+            style: IconButton.styleFrom(backgroundColor: Colors.white),
+            icon: Icon(Icons.notifications_none),
           ),
         ],
       ),
-      body: SingleChildScrollView( 
+      body: SingleChildScrollView(
         child: Column(
           children: [
             Hero(
@@ -45,7 +46,7 @@ class HomeScreen extends StatelessWidget {
                   enabled: false,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Theme.of(context).colorScheme.tertiary, 
+                    fillColor: Theme.of(context).colorScheme.tertiary,
                     hint: Text("Search products..."),
                     suffixIcon: Icon(Icons.search),
                     border: OutlineInputBorder(
@@ -57,11 +58,14 @@ class HomeScreen extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 14.0,
+                vertical: 10,
+              ),
               child: Stack(
                 children: [
                   Image(image: AssetImage("assets/image/banner.png")),
-        
+
                   // Positioned(
                   Positioned(
                     top: 15,
@@ -90,7 +94,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: 10),
-        
+
                         Text(
                           "NISHIO Premium grade\n(japen) 14",
                           style: TextStyle(
@@ -100,17 +104,21 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: 10),
-        
+
                         FilledButton(
                           onPressed: () {},
                           style: FilledButton.styleFrom(
-                            backgroundColor: Theme.of(context).colorScheme.primary,
+                            backgroundColor: Theme.of(
+                              context,
+                            ).colorScheme.primary,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0,
+                            ),
                             child: Text(
                               "Shop Now",
                               style: TextStyle(
@@ -128,7 +136,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 10),
-        
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14.0),
               child: Row(
@@ -153,10 +161,13 @@ class HomeScreen extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.secondary, 
+                            color: Theme.of(context).colorScheme.secondary,
                             borderRadius: BorderRadius.circular(100),
                           ),
-                          child: Icon(Icons.grain_outlined, color: Colors.black),
+                          child: Icon(
+                            Icons.grain_outlined,
+                            color: Colors.black,
+                          ),
                         ),
                         SizedBox(height: 5),
                         Text("Coffee", style: TextStyle(fontSize: 16)),
@@ -227,29 +238,22 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 10),
-        
-            // Container(
-            //   height: 180 ,
-            //   width: double.infinity,
-            //   color: Colors.amber,
-            //   child:,
-        
-            // )
+
             Container(
               padding: EdgeInsets.symmetric(horizontal: 14),
-              height: 210 ,  
-              width: double.infinity, 
+              height: 210,
+              width: double.infinity,
               child: Row(
                 children: [
                   Expanded(
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: 6, 
+                      itemCount: 6,
                       itemBuilder: (context, index) {
                         return Padding(
-                          padding: const EdgeInsets.only(right: 5.0), 
+                          padding: const EdgeInsets.only(right: 5.0),
                           child: Container(
-                            width: 160,    
+                            width: 160,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(12),
@@ -261,10 +265,11 @@ class HomeScreen extends StatelessWidget {
                                 right: 8,
                                 bottom: 12,
                               ),
-                              child: Stack( 
+                              child: Stack(
                                 children: [
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       ClipRRect(
                                         borderRadius: BorderRadius.only(
@@ -310,7 +315,9 @@ class HomeScreen extends StatelessWidget {
                                     child: Container(
                                       decoration: BoxDecoration(
                                         color: Color(0xFFDFC9B9),
-                                        borderRadius: BorderRadius.circular(100),
+                                        borderRadius: BorderRadius.circular(
+                                          100,
+                                        ),
                                       ),
                                       child: SizedBox(
                                         width: 30,
@@ -333,9 +340,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ],
               ),
-            ),  
-        
-            
+            ),
           ],
         ),
       ),

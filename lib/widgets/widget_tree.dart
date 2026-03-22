@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:the_brown/model/navigator_notifier.dart';
 import 'package:the_brown/screen/cart_screen.dart';
-import 'package:the_brown/screen/category_screen.dart';
+import 'package:the_brown/screen/category_screen/category_screen.dart';
 import 'package:the_brown/screen/favorite_screen.dart';
 import 'package:the_brown/screen/home_screen.dart';
 import 'package:the_brown/screen/profile_screen/profile_screen.dart';
