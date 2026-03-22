@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:the_brown/screen/signup_screen.dart';
 import 'package:the_brown/theme/them_mode.dart';
 import 'package:the_brown/widgets/widget_tree.dart';
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bounceable/flutter_bounceable.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -13,6 +14,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   var ctrlGender = TextEditingController();
   var ctrlPhone = TextEditingController();
   var ctrlLocation = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,6 +29,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               _buildProfile(),
               SizedBox(height: 20),
               _buildUserInfo(),
+              SizedBox(height: 40),
+              _buildSave(),
               SizedBox(height: 40),
             ],
           ),
@@ -50,31 +54,68 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
           ),
           SizedBox(height: 16),
-          Container(
-            height: 40,
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            decoration: BoxDecoration(
-              color: Color(0xffCC0909),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Edit Profile",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white,
-                  ),
-                ),
-                Icon(Icons.arrow_forward_ios, color: Colors.white),
-              ],
-            ),
-          ),
+
+          // Bounceable(
+          //   onTap: () {
+          //     setState(() {
+          //       isEdit = !isEdit;
+          //     });
+          //   },
+          //   child: Container(
+          //     height: 40,
+          //     padding: EdgeInsets.symmetric(horizontal: 20),
+          //     decoration: BoxDecoration(
+          //       color: Color(0xffCC0909),
+          //       borderRadius: BorderRadius.circular(12),
+          //     ),
+          //     child: Row(
+          //       mainAxisSize: MainAxisSize.min,
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //       children: [
+          //         Text(
+          //           "Edit Profile",
+          //           style: TextStyle(
+          //             fontSize: 16,
+          //             fontWeight: FontWeight.w400,
+          //             color: Colors.white,
+          //           ),
+          //         ),
+          //         Icon(Icons.arrow_forward_ios, color: Colors.white),
+          //       ],
+          //     ),
+          //   ),
+          // ),
         ],
       ),
+    );
+  }
+
+  Widget _buildSave() {
+    return Column(
+      children: [
+        Bounceable(
+          onTap: () {},
+          child: Container(
+            height: 50,
+
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            decoration: BoxDecoration(
+              color: Color(0xffAF7950),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Center(
+              child: Text(
+                "Save Change",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -94,28 +135,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             controller: ctrlLn,
             label: Text("Nai"),
           ),
-          Divider(),
+          Divider(color: Colors.grey),
           _buildTextField(
             text: "First Name",
             icon: Icons.person,
             controller: ctrlFn,
             label: Text("Huoy"),
           ),
-          Divider(),
+          Divider(color: Colors.grey),
           _buildTextField(
             text: "Gender",
             icon: Icons.transgender,
             controller: ctrlGender,
             label: Text("Female"),
           ),
-          Divider(),
+          Divider(color: Colors.grey),
           _buildTextField(
             text: "Phone Number",
             icon: Icons.phone_android,
             controller: ctrlPhone,
             label: Text("099887756"),
           ),
-          Divider(),
+          Divider(color: Colors.grey),
           _buildTextField(
             text: "Location",
             icon: Icons.pin_drop,
@@ -145,7 +186,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
         ),
         TextField(
-          readOnly: true,
           controller: controller,
           decoration: InputDecoration(
             hint: label,
