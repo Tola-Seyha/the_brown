@@ -14,7 +14,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   var ctrlGender = TextEditingController();
   var ctrlPhone = TextEditingController();
   var ctrlLocation = TextEditingController();
-
+  String? gender;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -143,12 +143,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             label: Text("Huoy"),
           ),
           Divider(color: Colors.grey),
-          _buildTextField(
-            text: "Gender",
-            icon: Icons.transgender,
-            controller: ctrlGender,
-            label: Text("Female"),
-          ),
+          _buildGenderDropdown(),
           Divider(color: Colors.grey),
           _buildTextField(
             text: "Phone Number",
@@ -192,6 +187,79 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             border: OutlineInputBorder(borderSide: BorderSide.none),
             prefixIcon: Icon(icon, color: Color(0xffDFC9B9)),
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildGenderDropdown() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Gender",
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+            color: Color(0xffDFC9B9),
+          ),
+        ),
+
+        DropdownButtonFormField<String>(
+          initialValue: gender,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(borderSide: BorderSide.none),
+            prefixIcon: Icon(Icons.transgender, color: Color(0xffDFC9B9)),
+          ),
+          hint: Text(
+            "Select Gender",
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+              color: Colors.black,
+            ),
+          ),
+          items: [
+            DropdownMenuItem(
+              value: "Male",
+              child: Text(
+                "Male",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            DropdownMenuItem(
+              value: "Female",
+              child: Text(
+                "Female",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            DropdownMenuItem(
+              value: "Other",
+              child: Text(
+                "Other",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ],
+
+          onChanged: (value) {
+            setState(() {
+              gender = value;
+            });
+          },
         ),
       ],
     );
