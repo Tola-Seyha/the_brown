@@ -4,6 +4,14 @@ class ProductModel {
   final double price;
   final String category;
   final String imagePath;
-  ProductModel({required this.name, required this.size, required this.price, required this.imagePath, 
- required this.category});  
+  int quantity;
+
+  ProductModel({
+    required this.name,
+    required this.size,
+    required this.price,
+    required this.imagePath,
+    required this.category,
+    this.quantity = 1,
+  });
 }

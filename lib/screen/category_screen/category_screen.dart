@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:the_brown/components/product_card_cpn.dart';
 import 'package:the_brown/model/product_model.dart';
 import 'package:the_brown/model/product_provider.dart';
@@ -36,8 +37,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   void _closeIcon() {
     searchProduct = "";
     _searchCtrl.clear();
-    _focusNode.unfocus();
-    // FocusScope.of(context).unfocus();
+    _focusNode.unfocus(); 
   }
 
   List<ProductModel> filterProduct(List<ProductModel> products) {
@@ -49,9 +49,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
           )
           .toList();
     }
-    if (searchProduct.isNotEmpty) {
+    if (searchProduct.isNotEmpty) { 
       filtered = filtered
-          .where(
+          .where( 
             (e) => e.name.toLowerCase().contains(
               searchProduct.trim().toLowerCase(),
             ),
@@ -89,6 +89,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
             child: TextField(
               controller: _searchCtrl,
               focusNode: _focusNode,
+            
               onTapOutside: (event) {
                 setState(() {
                   FocusScope.of(context).unfocus();
@@ -100,9 +101,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 });
               },
               decoration: InputDecoration(
-                filled: true,
-                // fillColor: Color( ),
-                isDense: true,
+                filled: true, 
+                isDense: true,        
+                hint: Text("Search products",style: TextStyle(fontSize: 14, color: Colors.black54),),
                 contentPadding: EdgeInsets.symmetric(
                   horizontal: 12,
                   vertical: 10,
@@ -193,6 +194,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     name: p.name,
                     size: p.size,
                     price: p.price,
+                    product: p,
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -200,14 +202,16 @@ class _CategoryScreenState extends State<CategoryScreen> {
                           builder: (context) {
                             return ProductDetail(
                               name: p.name,
-                              imagePath: p.imagePath,
+                              imagePath: p.imagePath, 
                               price: p.price,
                               item: p,
+                              size: p.size,
                             );
                           },
                         ),
                       );
                     },
+
                   );
                 },
               ),

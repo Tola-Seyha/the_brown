@@ -8,22 +8,34 @@ class ProductDetail extends StatefulWidget {
   final String imagePath;
   final double price;
   final ProductModel item;
+  final String size;
   const ProductDetail({
-    super.key,
+    super.key, 
     required this.name,
     required this.imagePath,
     required this.price,
     required this.item,
+    required this.size,
   });
 
   @override
   State<ProductDetail> createState() => _ProductDetailState();
 }
 
-class _ProductDetailState extends State<ProductDetail> {
-  String selectedSize = "200g";
+class _ProductDetailState extends State<ProductDetail> { 
+  late String selectedSize = widget.size; 
+  int _qty = 1;
 
-  List<String> size = ["200g", "500g", "1kg"];
+  List<String> size = ["200g", "500g", "1kg"]; 
+  
+  double get _currentPrice {
+    double basePrice = widget.price;
+    if (selectedSize == "500g") return basePrice * 2;
+    if (selectedSize == "1kg") return basePrice * 3;
+    return basePrice;
+  }
+
+  double get _totalPrice => _currentPrice * _qty;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,7 +91,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     mainAxisAlignment: .spaceBetween,
                     children: [
                       Text(
-                        "\$${widget.price.toStringAsFixed(2)}",
+                        "\$${_currentPrice.toStringAsFixed(2)}",
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.error,
                           fontSize: 28,
@@ -230,22 +242,32 @@ class _ProductDetailState extends State<ProductDetail> {
                     child: Row(
                       children: [
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            if (_qty > 1) {
+                              setState(() {
+                                _qty--;
+                              });
+                            }
+                          },
                           icon: Icon(
                             Icons.remove,
                             size: 23,
-                            color: Colors.red.shade700,
+                            color: Theme.of(context).colorScheme.error, 
                           ),
                         ),
                         Text(
-                          "10",
+                          "$_qty",
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            setState(() {
+                              _qty++;
+                            });
+                          },
                           icon: Icon(Icons.add, size: 23, color: Colors.blue),
                         ),
                       ],
@@ -262,7 +284,7 @@ class _ProductDetailState extends State<ProductDetail> {
                         ),
                       ),
                       Text(
-                        "\$${widget.price.toStringAsFixed(2)}",
+                        "\$${_totalPrice.toStringAsFixed(2)}",
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
@@ -280,14 +302,34 @@ class _ProductDetailState extends State<ProductDetail> {
               padding: const EdgeInsets.symmetric(horizontal: 14.0),
               child: ElevatedButton(
                 onPressed: () {
-                  context.read<ProductProvider>().addPToCart(widget.item);
+                  bool added = context.read<ProductProvider>().addPToCart(
+                    ProductModel(
+                      name: widget.item.name,
+                      size: selectedSize,
+                      price: _currentPrice,
+                      imagePath: widget.item.imagePath,
+                      category: widget.item.category,
+                      quantity: _qty,
+                    ),
+                  );
+                  if (added) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text("Added ${widget.item.name} to Cart"),
                         duration: Duration(seconds: 1),
-                      ), 
-                    ); 
-                    
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          "${widget.item.name} is already in the Cart",
+                        ),
+                        duration: Duration(seconds: 1),
+                        backgroundColor: Theme.of(context).colorScheme.error,
+                      ),
+                    );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).colorScheme.primary,
