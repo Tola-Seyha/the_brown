@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:the_brown/model/product_provider.dart';
+import 'package:the_brown/model/product_model.dart';
 
-class ProductCardCpn extends StatelessWidget {
+class ProductCardCpn extends StatefulWidget {
   final String name;
   final String size;
   final double price;
   final String imagePath;
   final Function()? onPressed;
+  final ProductModel product;
+  final Function(ProductModel)? onFavoritePressed;
 
   const ProductCardCpn({
     super.key,
@@ -14,14 +19,22 @@ class ProductCardCpn extends StatelessWidget {
     required this.price,
     required this.imagePath,
     required this.onPressed,
+    required this.product, 
+    this.onFavoritePressed,
   });
 
   @override
+  State<ProductCardCpn> createState() => _ProductCardCpnState();
+}
+
+class _ProductCardCpnState extends State<ProductCardCpn> {
+  @override
   Widget build(BuildContext context) {
+    bool isFavorite = context.watch<ProductProvider>().isFavorite(widget.product);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        decoration: BoxDecoration(
+        decoration: BoxDecoration(  
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -45,7 +58,7 @@ class ProductCardCpn extends StatelessWidget {
                         topLeft: Radius.circular(16),
                         topRight: Radius.circular(16),
                       ),  
-                      child: Image.asset(imagePath, fit: BoxFit.fill),       
+                      child: Image.asset(widget.imagePath, fit: BoxFit.fill),       
                     ),
                   ),
                   Positioned(
@@ -61,15 +74,33 @@ class ProductCardCpn extends StatelessWidget {
                       child: SizedBox(
                         width: 30,
                         height: 30, 
-                        child: IconButton(
+                         child: IconButton(
                           padding: EdgeInsets.zero,
-                          onPressed: () {}, 
-                          icon: Icon(Icons.favorite_border, size: 20,), 
+                          onPressed: () {
+                            context.read<ProductProvider>().toggleFavorite(widget.product);
+                            
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(!isFavorite ? "Added to favorites!" : "Removed from favorites!"),
+                                duration: Duration(milliseconds: 800),
+                              ),
+                            );
+
+                            if (widget.onFavoritePressed != null) {
+                              widget.onFavoritePressed!(widget.product);
+                            }
+                          },
+                          icon: Icon(
+                            isFavorite ? Icons.favorite : Icons.favorite_border,
+                            size: 20,
+                             color: isFavorite ? Theme.of(context).colorScheme.error : null,
+                          ), 
                         ),
                       ),
                     ),
                   ),
-                ],
+                ], 
               ),
             ),
             Expanded(
@@ -92,7 +123,7 @@ class ProductCardCpn extends StatelessWidget {
                         children: [
                           SizedBox(height: 10),
                           Text(
-                            name,
+                            widget.name,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
@@ -100,7 +131,7 @@ class ProductCardCpn extends StatelessWidget {
                           ), 
                           SizedBox(height: 5),
                           Text(
-                            size,
+                            widget.size,
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w300,
@@ -108,7 +139,7 @@ class ProductCardCpn extends StatelessWidget {
                           ), 
                           SizedBox(height: 5),
                           Text(
-                            "\$ ${price.toStringAsFixed(2)}",
+                            "\$ ${widget.price.toStringAsFixed(2)}",
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 16,
@@ -132,7 +163,7 @@ class ProductCardCpn extends StatelessWidget {
                         height: 30,
                         child: IconButton(
                           padding: EdgeInsets.zero,
-                          onPressed: onPressed,
+                          onPressed: widget.onPressed,
                           icon: Icon(Icons.add),
                         ),
                       ),

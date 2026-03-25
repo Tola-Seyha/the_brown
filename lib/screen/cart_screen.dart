@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:the_brown/components/product_in_cart.dart';
 import 'package:the_brown/model/product_provider.dart';
 
 class CartScreen extends StatefulWidget {
@@ -15,7 +16,102 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Cart")),
+      appBar: AppBar(
+        title: Selector<ProductProvider, int>(
+          builder: (context, itemCount, child) {
+            return Text(
+              "My Carts ($itemCount) ",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            );
+          },
+          selector: (context, count) => count.itemCount,
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10.0),
+            child: Selector<ProductProvider, bool>(
+              selector: (coontext, provider) {
+                return provider.addToCart.isNotEmpty;
+              },
+              builder: (context, isNotEmpty, child) {
+                return isNotEmpty
+                    ? TextButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                title: const Text(
+                                  "Do you want to clear your cart?",
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      context
+                                          .read<ProductProvider>()
+                                          .removeAll();
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      "Yes",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.green.shade600,
+                                      ),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+
+                                    child: Text(
+                                      "No",
+                                      style: TextStyle(
+                                         fontWeight: FontWeight.w500,
+                                        fontSize: 16,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: Text(
+                          "Clear All",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Theme.of(context).colorScheme.error,
+                          ),
+                        ),
+                      )
+                    : TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          "Clear All",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color:  Colors.red.shade200, 
+                          ),
+                        ),
+                      );
+              },
+            ),
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Expanded(
@@ -23,146 +119,41 @@ class _CartScreenState extends State<CartScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 14.0),
               child: Consumer<ProductProvider>(
                 builder: (context, value, child) {
-                  return ListView.builder(
-                    itemCount: value.addToCart.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: Container(
-                          height: 120,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 2,
-                                offset: Offset(1, 2),
-                                color: Colors.black38,
-                              ),
-                            ],
+                  return value.addToCart.isEmpty
+                      ? Center(
+                          child: Text(
+                            "Your cart is empty",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey.shade600,
+                            ),
                           ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  height: double.infinity,
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                    // color: Colors.amber,
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(16),
-                                      bottomLeft: Radius.circular(16),
-                                    ),
-                                  ),
-                                  child: Image.asset(
-                                    value.addToCart[index].imagePath,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Container(
-                                  height: double.infinity,
-                                  width: 100,
-                                  // color: Colors.teal,
-                                  child: Column(
-                                    crossAxisAlignment: .start,
-                                    mainAxisAlignment: .spaceEvenly,
-                                    children: [
-                                      Text(
-                                        value.addToCart[index].name,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      Text(
-                                        value.addToCart[index].size,
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w300,
-                                        ),
-                                      ),
-                                      Text(
-                                        "\$${value.addToCart[index].price.toStringAsFixed(2)}",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.primary,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Stack(
-                                  children: [
-                                    SizedBox(
-                                      height: double.infinity,
-                                      width: 100,
-                                      // color: Colors.brown,
-                                    ),
-                                    Positioned(
-                                      bottom: 15,
-                                      right: 15,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: Color(0xFFDFC9B9),
-                                          borderRadius: BorderRadius.circular(
-                                            100,
-                                          ),
-                                        ),
-                                        child: SizedBox(
-                                          width: 30,
-                                          height: 30,
-                                          child: IconButton(
-                                            padding: EdgeInsets.zero,
-                                            onPressed: () {},
-                                            icon: Icon(Icons.add),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 15,
-                                      right: 15,
-                                      child: Container(
-                                        alignment: .center,
-
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.tertiary,
-                                          borderRadius: BorderRadius.circular(
-                                            100,
-                                          ),
-                                        ),
-                                        child: SizedBox(
-                                          width: 30,
-                                          height: 30,
-                                          child: IconButton(
-                                            padding: EdgeInsets.zero,
-                                            onPressed: () {},
-                                            icon: Icon(
-                                              Icons.favorite_border,
-                                              size: 20,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
+                        )
+                      : ListView.builder(
+                          itemCount: value.addToCart.length,
+                          itemBuilder: (context, index) {
+                            final p = value.addToCart[index];
+                            return ProductInCart(
+                              imagePath: p.imagePath,
+                              name: p.name,
+                              size: p.size,
+                              price: p.price,
+                              quantity: p.quantity,
+                              onPressed: () {
+                                context.read<ProductProvider>().removeFromCart(
+                                  index,
+                                );
+                              },
+                              onQuantityChanged: (newQty) {
+                                context.read<ProductProvider>().updateQuantity(
+                                  index,
+                                  newQty,
+                                );
+                              },
+                            );
+                          },
+                        );
                 },
               ),
             ),
