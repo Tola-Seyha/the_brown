@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:the_brown/db/product_db.dart';
 import 'package:the_brown/widgets/widget_tree.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -16,6 +18,16 @@ class _SignupScreenState extends State<SignupScreen> {
   bool isShow = false;
   bool isShowc = false;
 
+  void login() async {
+    var pref = await SharedPreferences.getInstance();
+    pref.setBool("isLogin", true);
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => WidgetTree()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +35,7 @@ class _SignupScreenState extends State<SignupScreen> {
         children: [
           Expanded(
             flex: 4,
-            child: Container(
+            child: SizedBox(
               width: double.infinity,
               // color: Colors.amber,
               child: Image.asset("assets/image/login.png", fit: BoxFit.cover),
@@ -194,18 +206,25 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ),
                                 ),
                               ),
-                              onPressed: () {
+
+                              onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        return WidgetTree();
-                                      },
-                                    ),
+                                  await ProfileDB.signup(
+                                    email: _emailCtrl.text,
+                                    password: _pwdCtrl.text,
                                   );
+
+                                  // Navigator.pushReplacement(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (_) => WidgetTree(),
+                                  //   ),
+                                  // );
+                                  login();
                                 }
+                                ;
                               },
+
                               child: Container(
                                 width: double.infinity,
                                 alignment: Alignment.center,

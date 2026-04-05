@@ -1,5 +1,10 @@
+import 'dart:io';
+
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:the_brown/db/product_db.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -14,7 +19,42 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   var ctrlGender = TextEditingController();
   var ctrlPhone = TextEditingController();
   var ctrlLocation = TextEditingController();
+  String selectedProfile = "";
   String? gender;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadProfile();
+  }
+
+  void loadProfile() async {
+    var data = await ProfileDB.getProfile();
+
+    if (data != null) {
+      setState(() {
+        ctrlFn.text = data["firstName"] ?? "";
+        ctrlLn.text = data["lastName"] ?? "";
+        ctrlPhone.text = data["phone"] ?? "";
+        ctrlLocation.text = data["location"] ?? "";
+
+        gender = data["gender"];
+        selectedProfile = data["image"] ?? "";
+      });
+    }
+  }
+
+  void chooseProfile(ImageSource source) async {
+    var imagePicked = await ImagePicker().pickImage(source: source);
+
+    if (imagePicked == null) return;
+
+    setState(() {
+      selectedProfile = imagePicked.path;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +66,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildProfile(),
+              buildSelectedProfile(),
               SizedBox(height: 20),
               _buildUserInfo(),
               SizedBox(height: 40),
@@ -39,53 +79,79 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  Widget _buildProfile() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircleAvatar(
-            radius: 60,
-            backgroundImage: AssetImage("assets/profile/profile1.png"),
-          ),
-          SizedBox(height: 16),
-          Text(
-            "Nai",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-          ),
-          SizedBox(height: 16),
+  Widget buildSelectedProfile() {
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Choose Options"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    onTap: () {
+                      Navigator.pop(context);
+                      chooseProfile(ImageSource.camera);
+                    },
+                    leading: Icon(Icons.camera_alt),
+                    title: Text("Camera"),
+                  ),
+                  ListTile(
+                    onTap: () {
+                      Navigator.pop(context);
+                      chooseProfile(ImageSource.gallery);
+                    },
+                    leading: Icon(Icons.photo_library_sharp),
+                    title: Text("Gallary"),
+                  ),
+                ],
+              ),
+              actionsPadding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+              contentPadding: EdgeInsets.only(left: 20, right: 20),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("Cancel"),
+                ),
+              ],
+            );
+          },
+        );
+      },
+      child: Center(
+        child: badges.Badge(
+          badgeContent: Icon(Icons.add, color: Colors.white, size: 16),
+          position: badges.BadgePosition.bottomEnd(bottom: 9, end: 9),
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.35,
+            height: MediaQuery.of(context).size.width * 0.35,
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              // color: Colors.amber,
+              shape: BoxShape.circle,
+            ),
 
-          // Bounceable(
-          //   onTap: () {
-          //     setState(() {
-          //       isEdit = !isEdit;
-          //     });
-          //   },
-          //   child: Container(
-          //     height: 40,
-          //     padding: EdgeInsets.symmetric(horizontal: 20),
-          //     decoration: BoxDecoration(
-          //       color: Color(0xffCC0909),
-          //       borderRadius: BorderRadius.circular(12),
-          //     ),
-          //     child: Row(
-          //       mainAxisSize: MainAxisSize.min,
-          //       mainAxisAlignment: MainAxisAlignment.center,
-          //       children: [
-          //         Text(
-          //           "Edit Profile",
-          //           style: TextStyle(
-          //             fontSize: 16,
-          //             fontWeight: FontWeight.w400,
-          //             color: Colors.white,
-          //           ),
-          //         ),
-          //         Icon(Icons.arrow_forward_ios, color: Colors.white),
-          //       ],
-          //     ),
-          //   ),
-          // ),
-        ],
+            child: selectedProfile.isEmpty
+                ? Center(
+                    child: Text(
+                      "${ctrlFn.text.isNotEmpty ? ctrlFn.text[0] : ''}"
+                              "${ctrlLn.text.isNotEmpty ? ctrlLn.text[0] : ''}"
+                          .toUpperCase(),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: MediaQuery.of(context).size.width * 0.175,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )
+                : Image.file(File(selectedProfile), fit: BoxFit.cover),
+          ),
+        ),
       ),
     );
   }
@@ -94,7 +160,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Column(
       children: [
         Bounceable(
-          onTap: () {},
+          onTap: () async {
+            await ProfileDB.saveProfile({
+              "firstName": ctrlFn.text,
+              "lastName": ctrlLn.text,
+              "gender": gender,
+              "phone": ctrlPhone.text,
+              "location": ctrlLocation.text,
+              "image": selectedProfile,
+            });
+
+            Navigator.pop(context, true);
+          },
           child: Container(
             height: 50,
 
@@ -133,14 +210,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             text: "Last Name",
             icon: Icons.person,
             controller: ctrlLn,
-            label: Text("Nai"),
+            label: Text(""),
           ),
           Divider(color: Colors.grey),
           _buildTextField(
             text: "First Name",
             icon: Icons.person,
             controller: ctrlFn,
-            label: Text("Huoy"),
+            label: Text(""),
           ),
           Divider(color: Colors.grey),
           _buildGenderDropdown(),
@@ -149,14 +226,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             text: "Phone Number",
             icon: Icons.phone_android,
             controller: ctrlPhone,
-            label: Text("099887756"),
+            label: Text(""),
           ),
           Divider(color: Colors.grey),
           _buildTextField(
             text: "Location",
             icon: Icons.pin_drop,
             controller: ctrlLocation,
-            label: Text("Phnom penh"),
+            label: Text(""),
           ),
         ],
       ),

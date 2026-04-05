@@ -6,7 +6,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold( 
-      appBar: AppBar(   
+      appBar: AppBar( 
+        automaticallyImplyLeading: false,  
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
