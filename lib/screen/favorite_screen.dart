@@ -147,6 +147,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                         price: p.price,
                                         item: p,
                                         size: p.size,
+                                        
                                       );
                                     },
                                   ),
