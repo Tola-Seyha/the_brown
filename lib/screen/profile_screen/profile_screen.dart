@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bounceable/flutter_bounceable.dart';
+import 'package:the_brown/db/product_db.dart';
 import 'package:the_brown/screen/profile_screen/profile_detail_sccreen/change_pwd_screen.dart';
 import 'package:the_brown/screen/profile_screen/profile_detail_sccreen/edit_profile_screen.dart';
 import 'package:the_brown/screen/profile_screen/profile_detail_sccreen/help_n_spp_screen.dart';
@@ -15,6 +18,28 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   bool isNotification = false;
   bool isDarkmode = false;
+  String firstName = "";
+  String lastName = "";
+  String imagePath = "";
+
+  @override
+  void initState() {
+    super.initState();
+    loadProfile();
+  }
+
+  void loadProfile() async {
+    var data = await ProfileDB.getProfile();
+
+    if (data != null) {
+      setState(() {
+        firstName = data["firstName"] ?? "";
+        lastName = data["lastName"] ?? "";
+        imagePath = data["image"] ?? "";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,11 +65,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
       children: [
         CircleAvatar(
           radius: 55,
-          backgroundImage: AssetImage("assets/profile/profile1.png"),
+          backgroundColor: Colors.grey,
+
+          child: imagePath.isEmpty
+              ? Text(
+                  "${firstName.isNotEmpty ? firstName[0] : ''}"
+                          "${lastName.isNotEmpty ? lastName[0] : ''}"
+                      .toUpperCase(),
+
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+              : ClipOval(
+                  child: Image.file(
+                    File(imagePath),
+                    width: 110,
+                    height: 110,
+                    fit: BoxFit.cover,
+                  ),
+                ),
         ),
+
         SizedBox(height: 16),
+
         Text(
-          "Nai Nai",
+          "$firstName $lastName",
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
         ),
       ],
@@ -56,11 +104,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       children: [
         //edit
         Bounceable(
-          onTap: () {
-            Navigator.push(
+          onTap: () async {
+            var result = await Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => EditProfileScreen()),
             );
+
+            if (result == true) {
+              loadProfile();
+            }
           },
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
