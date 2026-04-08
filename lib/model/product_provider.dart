@@ -128,7 +128,7 @@ class ProductProvider extends ChangeNotifier {
     if (exists) {
       return false;
     }
-    _addCart.add(p);
+    _addCart.add(p); 
     itemCount += p.quantity; 
     notifyListeners();
     return true;

@@ -124,7 +124,7 @@ class _CartScreenState extends State<CartScreen> {
                           child: Text(
                             "Your cart is empty",
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 20, 
                               fontWeight: FontWeight.w500,
                               color: Colors.grey.shade600,
                             ),
@@ -153,7 +153,7 @@ class _CartScreenState extends State<CartScreen> {
                               },
                             );
                           },
-                        );
+                        ); 
                 },
               ),
             ),

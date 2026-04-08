@@ -189,6 +189,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 ),
                 itemBuilder: (context, index) {
                   final p = filtered[index];
+                  final indx =  index;
                   return ProductCardCpn(
                     imagePath: p.imagePath,
                     name: p.name,
@@ -206,6 +207,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                               price: p.price,
                               item: p,
                               size: p.size,
+                              index: indx,
                             );
                           },
                         ),

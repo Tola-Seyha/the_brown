@@ -9,25 +9,27 @@ class ProductDetail extends StatefulWidget {
   final double price;
   final ProductModel item;
   final String size;
-  const ProductDetail({
-    super.key, 
+  int index;
+    ProductDetail({
+    super.key,
     required this.name,
     required this.imagePath,
     required this.price,
     required this.item,
     required this.size,
+    this.index=0
   });
 
   @override
   State<ProductDetail> createState() => _ProductDetailState();
 }
 
-class _ProductDetailState extends State<ProductDetail> { 
-  late String selectedSize = widget.size; 
+class _ProductDetailState extends State<ProductDetail> {
+  late String selectedSize = widget.size;
   int _qty = 1;
 
-  List<String> size = ["200g", "500g", "1kg"]; 
-  
+  List<String> size = ["200g", "500g", "1kg"];
+
   double get _currentPrice {
     double basePrice = widget.price;
     if (selectedSize == "500g") return basePrice * 2;
@@ -57,7 +59,7 @@ class _ProductDetailState extends State<ProductDetail> {
         scrollDirection: Axis.vertical,
         child: Column(
           crossAxisAlignment: .start,
-          children: [
+          children: [ 
             Container(
               height: 300,
               width: double.infinity,
@@ -252,7 +254,7 @@ class _ProductDetailState extends State<ProductDetail> {
                           icon: Icon(
                             Icons.remove,
                             size: 23,
-                            color: Theme.of(context).colorScheme.error, 
+                            color: Theme.of(context).colorScheme.error,
                           ),
                         ),
                         Text(
@@ -315,7 +317,18 @@ class _ProductDetailState extends State<ProductDetail> {
                   if (added) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text("Added ${widget.item.name} to Cart"),
+                        content: Row(
+                          children: [ 
+                            Text("Added ${widget.item.name} to Cart"),
+                            Spacer(), 
+                            ElevatedButton(
+                              onPressed: () {
+                                context.read<ProductProvider>().removeFromCart(widget.index);
+                              },
+                              child: Text("Undo"),
+                            ),
+                          ],
+                        ),
                         duration: Duration(seconds: 1),
                       ),
                     );
