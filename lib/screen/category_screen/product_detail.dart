@@ -321,12 +321,15 @@ class _ProductDetailState extends State<ProductDetail> {
                           children: [ 
                             Text("Added ${widget.item.name} to Cart"),
                             Spacer(), 
-                            ElevatedButton(
+                            ElevatedButton( 
+                              style: ElevatedButton.styleFrom(  
+                               backgroundColor: Colors.grey.shade50   
+                              ),
                               onPressed: () {
                                 context.read<ProductProvider>().removeFromCart(widget.index);
                               },
                               child: Text("Undo"),
-                            ),
+                            ), 
                           ],
                         ),
                         duration: Duration(seconds: 1),
@@ -356,10 +359,11 @@ class _ProductDetailState extends State<ProductDetail> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Icon(Icons.shopping_bag_outlined, color: Colors.white),
+                    SizedBox(width: 5,),  
                     Text(
                       "Add to Cart",
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 16, 
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
                       ),

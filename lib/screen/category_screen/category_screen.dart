@@ -112,7 +112,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   icon: _isTyping
                       ? Icon(Icons.close, size: 25)
                       : Icon(Icons.search, size: 25),
-
+                      
                   onPressed: () {
                     setState(() {
                       if (_isTyping) {
