@@ -21,7 +21,6 @@ class _SignupScreenState extends State<SignupScreen> {
   void login() async {
     var pref = await SharedPreferences.getInstance();
     pref.setBool("isLogin", true);
-
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => WidgetTree()),
@@ -76,9 +75,12 @@ class _SignupScreenState extends State<SignupScreen> {
                       Form(
                         key: _formKey,
                         child: Column(
-                          children: [
+                          children: [ 
                             //email
                             TextFormField(
+                              onTapOutside: (event) {
+                                FocusScope.of(context).unfocus();
+                              },
                               controller: _emailCtrl,
                               decoration: InputDecoration(
                                 filled: true,
@@ -146,7 +148,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ),
                                 ),
                               ),
-                              validator: (value) => value!.isEmpty
+                              validator: (value) =>
+                                  value!.isEmpty && value.length < 6
                                   ? "Please input password"
                                   : null,
                             ),

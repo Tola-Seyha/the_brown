@@ -63,7 +63,7 @@ class _CartScreenState extends State<CartScreen> {
                                       "Yes",
                                       style: TextStyle(
                                         fontSize: 16,
-                                        fontWeight: FontWeight.w500,
+                                        fontWeight: FontWeight.bold,
                                         color: Colors.green.shade600,
                                       ),
                                     ),
@@ -76,7 +76,7 @@ class _CartScreenState extends State<CartScreen> {
                                     child: Text(
                                       "No",
                                       style: TextStyle(
-                                         fontWeight: FontWeight.w500,
+                                        fontWeight: FontWeight.bold,
                                         fontSize: 16,
                                         color: Colors.red,
                                       ),
@@ -103,7 +103,7 @@ class _CartScreenState extends State<CartScreen> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
-                            color:  Colors.red.shade200, 
+                            color: Colors.red.shade200,
                           ),
                         ),
                       );
@@ -124,7 +124,7 @@ class _CartScreenState extends State<CartScreen> {
                           child: Text(
                             "Your cart is empty",
                             style: TextStyle(
-                              fontSize: 20, 
+                              fontSize: 20,
                               fontWeight: FontWeight.w500,
                               color: Colors.grey.shade600,
                             ),
@@ -141,9 +141,54 @@ class _CartScreenState extends State<CartScreen> {
                               price: p.price,
                               quantity: p.quantity,
                               onPressed: () {
-                                context.read<ProductProvider>().removeFromCart(
-                                  index,
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      title: Text(  
+                                        "Do you want to remove ${p.name} from your cart?", style: TextStyle(fontSize: 16,),
+                                      ), 
+                                      actions: [
+                                        TextButton( 
+                                          onPressed: () {
+                                            context.read<ProductProvider>().removeFromCart(index);  
+                                            Navigator.pop(context); 
+                                          },
+                                          child: Text(
+                                            "Yes, remove",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);  
+                                          },
+                                          child: Text(
+                                            "No",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.error,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
                                 );
+
+                                // context.read<ProductProvider>().removeFromCart(
+                                //   index,
+                                // );
                               },
                               onQuantityChanged: (newQty) {
                                 context.read<ProductProvider>().updateQuantity(
@@ -153,7 +198,7 @@ class _CartScreenState extends State<CartScreen> {
                               },
                             );
                           },
-                        ); 
+                        );
                 },
               ),
             ),

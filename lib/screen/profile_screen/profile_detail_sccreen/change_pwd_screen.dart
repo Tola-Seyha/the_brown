@@ -38,7 +38,7 @@ class _ChangePwdScreenState extends State<ChangePwdScreen> {
           ),
           Divider(color: Colors.grey),
           SizedBox(height: 16),
-          _buildTextField(
+          _buildTextField( 
             text: "New Password",
             controller: ctrlNew,
             label: "Enter New Password",
@@ -96,6 +96,9 @@ class _ChangePwdScreenState extends State<ChangePwdScreen> {
           ),
 
           TextField(
+            onTapOutside: (event) {
+              FocusScope.of(context).unfocus();
+            }, 
             controller: controller,
             obscureText: isPassword ? isHidden : false,
             decoration: InputDecoration(
