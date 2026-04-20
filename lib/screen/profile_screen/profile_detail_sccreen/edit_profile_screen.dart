@@ -270,75 +270,39 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Widget _buildGenderDropdown() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Gender",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-            color: Color(0xffDFC9B9),
-          ),
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        "Gender",
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+          color: Color(0xffDFC9B9),
         ),
+      ),
 
-        DropdownButtonFormField<String>(
-          initialValue: gender,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(borderSide: BorderSide.none),
-            prefixIcon: Icon(Icons.transgender, color: Color(0xffDFC9B9)),
-          ),
-          hint: Text(
-            "Select Gender",
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: Colors.black,
-            ),
-          ),
-          items: [
-            DropdownMenuItem(
-              value: "Male",
-              child: Text(
-                "Male",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-            DropdownMenuItem(
-              value: "Female",
-              child: Text(
-                "Female",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-            DropdownMenuItem(
-              value: "Other",
-              child: Text(
-                "Other",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-          ],
-
-          onChanged: (value) {
-            setState(() {
-              gender = value;
-            });
-          },
+      DropdownButtonFormField<String>(
+        value: (gender == "Male" || gender == "Female" || gender == "Other")
+            ? gender
+            : null,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(borderSide: BorderSide.none),
+          prefixIcon: Icon(Icons.transgender, color: Color(0xffDFC9B9)),
         ),
-      ],
-    );
-  }
+        hint: Text("Select Gender"),
+        items: [
+          DropdownMenuItem(value: "Male", child: Text("Male")),
+          DropdownMenuItem(value: "Female", child: Text("Female")),
+          DropdownMenuItem(value: "Other", child: Text("Other")),
+        ],
+        onChanged: (value) {
+          setState(() {
+            gender = value;
+          });
+        },
+      ),
+    ],
+  );
+}
 }
